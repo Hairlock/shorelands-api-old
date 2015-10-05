@@ -3,7 +3,7 @@
 ## Prerequisites
 
 Add a profiles.clj in the root directory with your postgres connection strings. An example has been
-placed in dev-resources folder
+placed in dev folder
 
 
 ## Running
