@@ -17,3 +17,4 @@ profiles.clj
 
 elm/node_modules
 elm/elm-stuff
+resources/public/js

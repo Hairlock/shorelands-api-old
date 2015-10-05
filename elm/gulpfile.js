@@ -17,20 +17,20 @@ gulp.task('clean', function(){
 });
 
 gulp.task('elm', ['elm-init'], function(){
-    return gulp.src('**/*.elm')
-        //.pipe(plumber({
-        //    errorHandler: notify.onError(function(error){
-        //        gutil.log(error.toString());
-        //        return "Elm Compile Error";
-        //    })
-        //}))
+    return gulp.src('modules/**/*.elm')
+        .pipe(plumber({
+            errorHandler: notify.onError(function(error){
+                gutil.log(error.toString());
+                return "Elm Compile Error";
+            })
+        }))
         .pipe(plumber({
             errorHandler: function(e){
                 gutil.log(e.toString());
             }
         }))
         .pipe(elm())
-        .pipe(gulp.dest('../resources/public/'))
+        .pipe(gulp.dest('../resources/public/js/'))
         .pipe(livereload());
 });
 
