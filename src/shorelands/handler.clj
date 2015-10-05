@@ -1,11 +1,12 @@
 (ns shorelands.handler
-  (:require [compojure.core :refer [defroutes routes wrap-routes]]
+  (:require [compojure.core :refer [routes wrap-routes]]
             [shorelands.layout :refer [error-page]]
             [shorelands.routes.home :refer [home-routes]]
             [shorelands.services.user :refer [user-service]]
             [shorelands.middleware :as middleware]
             [shorelands.db.core :as db]
             [compojure.route :as route]
+            [compojure.api.sweet :refer [defapi swagger-ui swagger-docs]]
             [taoensso.timbre :as timbre]
             [taoensso.timbre.appenders.3rd-party.rotor :as rotor]
             [selmer.parser :as parser]
@@ -14,7 +15,7 @@
 (defn init
   "init will be called once when
    app is deployed as a servlet on
-   an app server such as Tomcat
+   an app server such as tomcat
    put any initialization code here"
   []
 
@@ -40,9 +41,17 @@
   (db/disconnect!)
   (timbre/info "shutdown complete!"))
 
+(defapi service-apis
+  (swagger-ui "/swagger-ui")
+  (swagger-docs
+    {:info {:title "Shorelands Apis"
+            :version "0.0.1"}
+     :tags [{:name "User"   :description "crud endpoints"}]})
+  user-service)
+
 (def app-routes
   (routes
-    (var user-service)
+    (var service-apis)
     (wrap-routes #'home-routes middleware/wrap-csrf)
     (route/resources "/")
     (route/not-found

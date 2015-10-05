@@ -3,10 +3,9 @@
             [ring.util.http-response :refer :all]
             [compojure.api.sweet :refer :all]
             [schema.core :as s]
-            [shorelands.db.core :as db]))
+            [shorelands.db.core :as db]
+            [shorelands.middleware :refer [cors-mw]]))
 
-
-(db/connect!)
 
 (s/defschema User
   {:id Long
@@ -14,40 +13,38 @@
    (s/optional-key :email) String
    (s/optional-key :password) String})
 
-(defapi user-service
-  (ring.swagger.ui/swagger-ui
-    "/swagger-ui")
-  (swagger-docs
-    {:info {:title "User API"}})
+(defroutes* user-service
   (context* "/api" []
-            :tags ["users"]
 
-            (GET* "/users" []
-                  :return [User]
-                  :summary "returns the list of users"
-                  (ok (db/get-users)))
+      :tags ["User"]
 
-            (GET* "/user/:id" []
-                  :return User
-                  :path-params [id :- Long]
-                  :summary "returns the user with a given id"
-                  (ok (first (db/get-user {:id id}))))
+      (GET* "/users" []
+            :return [User]
+            :summary "returns the list of users"
+            :middlewares [cors-mw]
+            (ok (db/get-users)))
 
-            ;(POST* "/authenticate" []
-            ;       :return Boolean
-            ;       :body-params [user :- User]
-            ;       :summary "authenticates the user using the id and pass."
-            ;       (ok (db/authenticate user)))
-            ;
-            ;(POST* "/user" []
-            ;       :return Long
-            ;       :body-params [user :- User]
-            ;       :summary "creates a new user record."
-            ;       (ok (db/create-user-account! user)))
+      (GET* "/user/:id" []
+            :return User
+            :path-params [id :- Long]
+            :summary "returns the user with a given id"
+            (ok (first (db/get-user {:id id}))))
 
-            (DELETE* "/user" []
-                     :return Long
-                     :body-params [id :- String]
-                     :summary "deletes the user record with the given id."
-                     (ok (db/delete-user! {:id id})))))
+      ;(POST* "/authenticate" []
+      ;       :return Boolean
+      ;       :body-params [user :- User]
+      ;       :summary "authenticates the user using the id and pass."
+      ;       (ok (db/authenticate user)))
+      ;
+      ;(POST* "/user" []
+      ;       :return Long
+      ;       :body-params [user :- User]
+      ;       :summary "creates a new user record."
+      ;       (ok (db/create-user-account! user)))
+
+      (DELETE* "/user" []
+               :return Long
+               :body-params [id :- String]
+               :summary "deletes the user record with the given id."
+               (ok (db/delete-user! {:id id})))))
 
