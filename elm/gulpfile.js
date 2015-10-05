@@ -17,7 +17,7 @@ gulp.task('clean', function(){
 });
 
 gulp.task('elm', ['elm-init'], function(){
-    return gulp.src('elm/**/*.elm')
+    return gulp.src('**/*.elm')
         //.pipe(plumber({
         //    errorHandler: notify.onError(function(error){
         //        gutil.log(error.toString());
@@ -30,21 +30,21 @@ gulp.task('elm', ['elm-init'], function(){
             }
         }))
         .pipe(elm())
-        .pipe(gulp.dest('resources/public/'))
+        .pipe(gulp.dest('../resources/public/'))
         .pipe(livereload());
 });
 
 gulp.task('html', function(){
-    return gulp.src('resources/templates/**/*.html')
+    return gulp.src('../resources/templates/**/*.html')
         .pipe(livereload());
 });
 
 // watch for changes
 gulp.task('watch', function() {
     livereload.listen();
-    gulp.watch('elm/**/*.elm', ['elm']);
+    gulp.watch('**/*.elm', ['elm']);
     //gulp.watch('resources/templates/**/*.html', ['html'])
-    gulp.watch('resources/templates/**/*.html').on('change', livereload.changed);
+    gulp.watch('../resources/templates/**/*.html').on('change', livereload.changed);
 });
 
 gulp.task('default', ['elm', 'watch']);
