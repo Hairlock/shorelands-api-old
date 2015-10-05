@@ -1,0 +1,16 @@
+/target
+/lib
+/classes
+/checkouts
+pom.xml
+*.jar
+*.class
+/.lein-*
+profiles.clj
+/.env
+/.idea
+/.nrepl-port
+/shorelands.log
+/node_modules
+/elm-stuff
+*.log

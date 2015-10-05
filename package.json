@@ -1,0 +1,23 @@
+{
+  "name": "shorelands",
+  "version": "1.0.0",
+  "description": "",
+  "main": "elm.js",
+  "dependencies": {
+  },
+  "devDependencies": {
+    "del": "^2.0.2",
+    "gulp": "^3.9.0",
+    "gulp-elm": "^0.2.0",
+    "gulp-livereload": "^3.8.0",
+    "gulp-notify": "^2.2.0",
+    "gulp-plumber": "^1.0.1",
+    "gulp-through": "^0.3.0",
+    "gulp-util": "^3.0.6"
+  },
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "Yannick Sealy",
+  "license": "ISC"
+}

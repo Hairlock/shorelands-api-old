@@ -1,0 +1,26 @@
+{% extends "base.html" %}
+
+{% block head-scripts %}
+<script type="text/javascript" src="ShorelandsAdmin.js"></script>
+<script type="text/css" src="css/screen.css"></script>
+{% endblock %}
+
+{% block content %}
+<div id="ShorelandsAdmin"></div>
+
+<!-- scripts and styles -->
+{% style "/assets/bootstrap/css/bootstrap.min.css" %}
+{% style "/assets/bootstrap/css/bootstrap-theme.min.css" %}
+{% style "/css/screen.css" %}
+
+{% script "/assets/jquery/jquery.min.js" %}
+{% script "/assets/bootstrap/js/bootstrap.min.js" %}
+{% script "/assets/bootstrap/js/collapse.js" %}
+{% endblock %}
+
+{% block page-scripts %}
+<script type="text/javascript">
+    var contentDiv = document.getElementById('ShorelandsAdmin');
+    Elm.embed(Elm.ShorelandsAdmin, contentDiv);
+</script>
+{% endblock %}
