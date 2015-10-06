@@ -21,7 +21,7 @@
                  [org.clojure/tools.nrepl "0.2.11"]
                  [org.webjars/bootstrap "3.3.5"]
                  [org.webjars/jquery "2.1.4"]
-                 [buddy "0.7.1"]
+                 [buddy "0.7.2"]
                  [migratus "0.8.6"]
                  [conman "0.2.0"]
                  [crypto-password "0.1.3"]

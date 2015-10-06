@@ -2,7 +2,7 @@
   (:require [compojure.core :refer [routes wrap-routes]]
             [shorelands.layout :refer [error-page]]
             [shorelands.routes.home :refer [home-routes]]
-            [shorelands.services.user :refer [user-service]]
+            [shorelands.services.user.core :refer [user-service]]
             [shorelands.middleware :as middleware]
             [shorelands.db.core :as db]
             [compojure.route :as route]

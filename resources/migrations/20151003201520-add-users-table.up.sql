@@ -1,8 +1,11 @@
-CREATE TABLE users
-(id SERIAL PRIMARY KEY,
- name VARCHAR(150),
- email VARCHAR(40),
- admin BOOLEAN,
- last_login TIME,
- is_active BOOLEAN,
- password VARCHAR(100));
+-- name: create-user-table-if-not-exists!
+-- create the user table if it does not exist
+
+CREATE TABLE IF NOT EXISTS users(
+ id            SERIAL PRIMARY KEY NOT NULL,
+ username      VARCHAR(100) NOT NULL,
+ email         VARCHAR(100) NOT NULL UNIQUE,
+ last_login    TIME,
+ password      TEXT,
+ refresh_token TEXT
+);

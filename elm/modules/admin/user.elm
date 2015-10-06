@@ -24,7 +24,7 @@ users =
  let user =
       Json.object3 User
         ("id" := Json.int)
-        ("name" := Json.string)
+        ("username" := Json.string)
         ("email" := Json.string)
  in
    Json.list user
