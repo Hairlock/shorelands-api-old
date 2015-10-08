@@ -23,6 +23,7 @@
                  [org.webjars/jquery "2.1.4"]
                  [buddy "0.7.2"]
                  [migratus "0.8.6"]
+                 [codox "0.8.13"]
                  [conman "0.2.0"]
                  [crypto-password "0.1.3"]
                  [org.postgresql/postgresql "9.4-1203-jdbc41"]
