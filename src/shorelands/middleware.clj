@@ -12,6 +12,7 @@
             [ring.middleware.anti-forgery :refer [wrap-anti-forgery]]
             [ring.middleware.format :refer [wrap-restful-format]]
             [ring.middleware.anti-forgery :refer [wrap-anti-forgery]]
+            [ring.util.http-response :refer [unauthorized]]
             [buddy.auth.middleware :refer [wrap-authentication]]
             [buddy.auth.backends.session :refer [session-backend]]
             [buddy.auth.accessrules :refer [restrict]]
@@ -105,3 +106,10 @@
           (assoc-in [:headers "Access-Control-Allow-Origin"] "*")
           (assoc-in [:headers "Access-Control-Allow-Methods"] "GET, PUT, PATCH, POST, DELETE, OPTIONS")
           (assoc-in [:headers "Access-Control-Allow-Headers"] "Authorization, Content-Type")))))
+
+
+(defn token-auth-mw [handler]
+  (fn [request]
+    (if (authenticated? request)
+      (handler request)
+      (unauthorized {:error "Not Authorized"}))))
