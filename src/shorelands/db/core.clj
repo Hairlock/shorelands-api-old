@@ -2,6 +2,7 @@
   (:require
     [cheshire.core :refer [generate-string parse-string]]
     [clojure.java.jdbc :as jdbc]
+    [clojure.java.io :as io]
     [conman.core :as conman]
     [crypto.password.bcrypt :as password]
     [environ.core :refer [env]])
@@ -17,15 +18,15 @@
 
 (defonce ^:dynamic *conn* (atom nil))
 
-(conman/bind-connection *conn* "sql/queries.sql")
+(conman/bind-connection *conn* "sql/build/bundle.sql")
 
 (defn concat-sql []
-  (let [directory (clojure.java.io/file "resources/sql")
+  (let [directory (io/file "resources/sql/src")
         files     (file-seq directory)
-        directoryPath (.getAbsolutePath (first files))
-        outputFile (str directoryPath "//bundle.sql")
+        directoryPath (.getAbsolutePath (io/file (.getParent (first files))))
+        outputFile (str directoryPath "//build//bundle.sql")
         reduce-fn  (fn [concatenated file]
-                     (str concatenated "\r\n\r\n" (slurp (.getAbsolutePath file))))
+                     (str concatenated "\r\n" (slurp (.getAbsolutePath file))))
         merged-sql (reduce reduce-fn "" (filter #(.isFile %) files))]
     (spit outputFile merged-sql)))
 

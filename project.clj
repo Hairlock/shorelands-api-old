@@ -25,6 +25,7 @@
                  [migratus "0.8.6"]
                  [codox "0.8.13"]
                  [conman "0.2.0"]
+                 [yesql "0.5.1"]
                  [crypto-password "0.1.3"]
                  [org.postgresql/postgresql "9.4-1203-jdbc41"]
                  [metosin/compojure-api "0.23.1"]
