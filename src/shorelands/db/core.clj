@@ -19,6 +19,15 @@
 
 (conman/bind-connection *conn* "sql/queries.sql")
 
+(defn concat-sql []
+  (let [directory (clojure.java.io/file "resources/sql")
+        files     (file-seq directory)
+        directoryPath (.getAbsolutePath (first files))
+        outputFile (str directoryPath "//bundle.sql")
+        reduce-fn  (fn [concatenated file]
+                     (str concatenated "\r\n\r\n" (slurp (.getAbsolutePath file))))
+        merged-sql (reduce reduce-fn "" (filter #(.isFile %) files))]
+    (spit outputFile merged-sql)))
 
 
 (def pool-spec
