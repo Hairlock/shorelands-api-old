@@ -18,11 +18,6 @@ gulp.task('elm', ['elm-init'], function(){
                 return "Elm Compile Error";
             })
         }))
-        .pipe(plumber({
-            errorHandler: function(e){
-                gutil.log(e.toString());
-            }
-        }))
         .pipe(elm())
         .pipe(gulp.dest('../resources/public/js/'))
         .pipe(livereload());
