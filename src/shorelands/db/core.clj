@@ -68,6 +68,8 @@
 
 (def conn (d/connect url))
 
+;(start)
+
 ;(println "Attributes defined in db:"
 ;		 (map (comp :db/ident (partial d/entity (d/db (d/connect url))) first)
 ;			  (d/q '[:find ?e :where [_ :db.install/attribute ?e]] (d/db (d/connect url)))))

@@ -28,15 +28,13 @@
   [{username :user/name email :user/email groups :user/group}]
   {:username username
    :email    email
-   :groups   (concat (map get-group-permission groups))})
+   :groups   (flatten (map get-group-permission groups))})
 
 (defn get-users []
   (d/q '[:find [(pull ?uid [*]) ...]
 			   :where [?uid :user/name _]]
 			 db))
 
+;(def users (get-users))
 
-;(union (list ["Admin"] ["Moderator"]))
-
-
-
+;(map format-users users)
