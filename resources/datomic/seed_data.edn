@@ -1,0 +1,25 @@
+;; users
+[{:db/id #db/id[:db.part/db]
+  :db/ident :user/name
+  :db/index true
+  :db/valueType :db.type/string
+  :db/cardinality :db.cardinality/one
+  :db.install/_attribute :db.part/db}
+
+ {:db/id #db/id[:db.part/db]
+  :db/ident :user/email
+  :db/index true
+  :db/unique :db.unique/identity
+  :db/valueType :db.type/string
+  :db/cardinality :db.cardinality/one
+  :db.install/_attribute :db.part/db}
+
+ {:db/id #db/id[:db.part/db]
+  :db/ident :user/passwordHash
+  :db/valueType :db.type/string
+  :db/cardinality :db.cardinality/one
+  :db.install/_attribute :db.part/db}
+
+ {:db/id #db/id[:db.part/db]
+  :db/ident :refreshToken
+  :db/valueType :db.type/ref}]

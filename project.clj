@@ -28,6 +28,8 @@
                  [yesql "0.5.1"]
                  [crypto-password "0.1.3"]
                  [org.postgresql/postgresql "9.4-1203-jdbc41"]
+                 [com.datomic/datomic-free "0.9.5206"]
+                 [datomic-schema "1.3.0"]
                  [metosin/compojure-api "0.23.1"]
                  [metosin/ring-swagger-ui "2.1.3"]
                  [org.immutant/web "2.1.0"]]

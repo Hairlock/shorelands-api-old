@@ -1,97 +1,81 @@
 (ns shorelands.db.core
   (:require
     [cheshire.core :refer [generate-string parse-string]]
-    [clojure.java.jdbc :as jdbc]
     [clojure.java.io :as io]
-    [conman.core :as conman]
     [crypto.password.bcrypt :as password]
-    [environ.core :refer [env]])
-  (:import org.postgresql.util.PGobject
-           org.postgresql.jdbc4.Jdbc4Array
-           clojure.lang.IPersistentMap
-           clojure.lang.IPersistentVector
-           [java.sql
-            BatchUpdateException
-            Date
-            Timestamp
-            PreparedStatement]))
+	[datomic.api :as d]
+	[datomic-schema.schema :as s]
+    [environ.core :refer [env]]))
 
-(defonce ^:dynamic *conn* (atom nil))
-
-(conman/bind-connection *conn* "sql/build/bundle.sql")
-
-(defn concat-sql []
-  (let [directory (io/file "resources/sql/src")
-        files     (file-seq directory)
-        directoryPath (.getAbsolutePath (io/file (.getParent (first files))))
-        outputFile (str directoryPath "//build//bundle.sql")
-        reduce-fn  (fn [concatenated file]
-                     (str concatenated "\r\n" (slurp (.getAbsolutePath file))))
-        merged-sql (reduce reduce-fn "" (filter #(.isFile %) files))]
-    (spit outputFile merged-sql)))
+(defonce url "datomic:mem://shorelandsdb")
 
 
-(def pool-spec
-  {:adapter    :postgresql
-   :init-size  1
-   :min-idle   1
-   :max-idle   4
-   :max-active 32})
+(defn parts []
+  [(s/part "shorelands")])
 
-(defn connect! []
-  (conman/connect!
-    *conn*
-   (assoc
-     pool-spec
-     :jdbc-url (env :database-url))))
+(defn schema []
+  [(s/schema user
+			 (s/fields
+			   [name :string :indexed :unique-value]
+			   [email :string :indexed :unique-value]
+			   [password :string "Hashed password string"]
+			   [status :enum [:pending :active :inactive :cancelled]]
+			   [group :ref :many]))
+   (s/schema group
+			 (s/fields
+			   [name :string]
+			   [permission :string :many]))])
 
-(defn disconnect! []
-  (conman/disconnect! *conn*))
+(defn setup-db [url]
+  (d/delete-database url)
+  (d/create-database url)
+  (d/transact
+	(d/connect url)
+	(concat
+	  (s/generate-parts (parts))
+	  (s/generate-schema (schema) {:index-all? true}))))
 
-(defn to-date [sql-date]
-  (-> sql-date (.getTime) (java.util.Date.)))
 
-(extend-protocol jdbc/IResultSetReadColumn
-  Date
-  (result-set-read-column [v _ _] (to-date v))
 
-  Timestamp
-  (result-set-read-column [v _ _] (to-date v))
+(defn seed-db []
+  (let [gid (d/tempid :db.part/user)
+		gid2 (d/tempid :db.part/user)
+		conn (d/connect url)]
+	(d/transact
+	  conn
+	  [{:db/id            gid
+		:group/name       "Staff"
+		:group/permission "Admin"}
+	   {:db/id            gid2
+		:group/name       "Mod"
+		:group/permission "Moderator"}
+	   {:db/id         (d/tempid :db.part/user)
+		:user/name     "Yannick"
+		:user/email    "yannick.sealy08@gmail.com"
+		:user/password (password/encrypt "password")
+		:user/group    [gid gid2]
+		:user/status   :user.status/active}])))
 
-  Jdbc4Array
-  (result-set-read-column [v _ _] (vec (.getArray v)))
+(defn start []
+  (setup-db url)
+  (seed-db))
 
-  PGobject
-  (result-set-read-column [pgobj _metadata _index]
-    (let [type  (.getType pgobj)
-          value (.getValue pgobj)]
-      (case type
-        "json" (parse-string value true)
-        "jsonb" (parse-string value true)
-        "citext" (str value)
-        value))))
+(defn stop []
+  (d/delete-database url)
+  (d/release conn))
 
-(extend-type java.util.Date
-  jdbc/ISQLParameter
-  (set-parameter [v ^PreparedStatement stmt idx]
-    (.setTimestamp stmt idx (Timestamp. (.getTime v)))))
+(d/create-database url)
 
-(defn to-pg-json [value]
-  (doto (PGobject.)
-    (.setType "jsonb")
-    (.setValue (generate-string value))))
+(def conn (d/connect url))
 
-(extend-protocol jdbc/ISQLValue
-  IPersistentMap
-  (sql-value [value] (to-pg-json value))
-  IPersistentVector
-  (sql-value [value] (to-pg-json value)))
+;(println "Attributes defined in db:"
+;		 (map (comp :db/ident (partial d/entity (d/db (d/connect url))) first)
+;			  (d/q '[:find ?e :where [_ :db.install/attribute ?e]] (d/db (d/connect url)))))
 
-(defn create-user-account! [user]
-  (create-user! (update user :pass password/encrypt)))
 
-(defn authenticate [user]
-  (boolean
-    (when-let [db-user (-> user (get-user) first)]
-      (password/check (:pass user) (:pass db-user)))))
+
+
+
+
+
 

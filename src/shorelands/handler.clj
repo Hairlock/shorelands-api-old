@@ -27,7 +27,7 @@
                            :backlog 10})}})
 
   (if (env :dev) (parser/cache-off!))
-  (db/connect!)
+  (db/start)
   (timbre/info (str
                  "\n-=[shorelands started successfully"
                  (when (env :dev) " using the development profile")
@@ -38,7 +38,7 @@
    shuts down, put any clean up code here"
   []
   (timbre/info "shorelands is shutting down...")
-  (db/disconnect!)
+  (db/stop)
   (timbre/info "shutdown complete!"))
 
 (defapi service-apis
