@@ -10,10 +10,9 @@
 
 
 (s/defschema User
-  {:id       Long
-   :name     String
-   :email    String
-   :password String})
+  {:id      	 Long
+   :email	     String
+   :username     String })
 
 (defroutes* user-service
   (context* "/api" []
@@ -35,10 +34,10 @@
 
 	  (POST* "/user"		[]
 			 :return		User
-			 :middleware	[cors-mw]
+			 :middlewares	[cors-mw]
 			 :body-params	[user :- User]
 			 :summary		"Create a new user with a User object"
-			 (t/add-user user))
+			 (ok (t/add-user user)))
 
 	  ;(POST* "/user" []
 	  ;       :return Long

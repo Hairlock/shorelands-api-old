@@ -7,8 +7,7 @@
 	[datomic-schema.schema :as s]
     [environ.core :refer [env]]))
 
-(defonce url "datomic:mem://shorelandsdb")
-
+(def uri "datomic:mem://shorelandsdb")
 
 (defn parts []
   [(s/part "shorelands")])
@@ -26,21 +25,22 @@
 			   [name :string]
 			   [permission :string :many]))])
 
-(defn setup-db [url]
-  (d/delete-database url)
-  (d/create-database url)
-  (d/transact
-	(d/connect url)
-	(concat
-	  (s/generate-parts (parts))
-	  (s/generate-schema (schema) {:index-all? true}))))
+(defn setup-db []
+  (let [url "datomic:mem://shorelandsdb"]
+	(d/delete-database url)
+	(d/create-database url)
+	(d/transact
+	  (d/connect url)
+	  (concat
+		(s/generate-parts (parts))
+		(s/generate-schema (schema) {:index-all? true})))))
 
 
 
 (defn seed-db []
   (let [gid (d/tempid :db.part/user)
 		gid2 (d/tempid :db.part/user)
-		conn (d/connect url)]
+		conn (d/connect uri)]
 	(d/transact
 	  conn
 	  [{:db/id            gid
@@ -56,17 +56,23 @@
 		:user/group    [gid gid2]
 		:user/status   :user.status/active}])))
 
+
 (defn start []
-  (setup-db url)
+  (setup-db)
   (seed-db))
 
 (defn stop []
-  (d/delete-database url)
-  (d/release conn))
+  (d/delete-database uri))
 
-(d/create-database url)
+(start)
 
-(def conn (d/connect url))
+
+(def conn (d/connect uri))
+
+
+
+
+
 
 ;(start)
 
