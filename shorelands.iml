@@ -11,7 +11,7 @@
       <sourceFolder url="file://$MODULE_DIR$/test" isTestSource="true" />
       <excludeFolder url="file://$MODULE_DIR$/target" />
     </content>
-    <orderEntry type="jdk" jdkName="1.8" jdkType="JavaSDK" />
+    <orderEntry type="jdk" jdkName="1.7" jdkType="JavaSDK" />
     <orderEntry type="sourceFolder" forTests="false" />
     <orderEntry type="library" name="Leiningen: bouncer:0.3.3" level="project" />
     <orderEntry type="library" name="Leiningen: buddy:0.7.2" level="project" />
@@ -33,7 +33,7 @@
     <orderEntry type="library" name="Leiningen: migratus:0.8.6" level="project" />
     <orderEntry type="library" name="Leiningen: mvxcvi/puget:0.8.1" level="project" />
     <orderEntry type="library" name="Leiningen: org.clojure/clojure:1.7.0" level="project" />
-    <orderEntry type="library" name="Leiningen: org.clojure/tools.nrepl:0.2.6" level="project" />
+    <orderEntry type="library" name="Leiningen: org.clojure/tools.nrepl:0.2.10" level="project" />
     <orderEntry type="library" name="Leiningen: org.immutant/web:2.1.0" level="project" />
     <orderEntry type="library" name="Leiningen: org.postgresql/postgresql:9.4-1203-jdbc41" level="project" />
     <orderEntry type="library" name="Leiningen: org.webjars/bootstrap:3.3.5" level="project" />

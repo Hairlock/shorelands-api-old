@@ -54,7 +54,13 @@
 		:user/email    "yannick.sealy08@gmail.com"
 		:user/password (password/encrypt "password")
 		:user/group    [gid gid2]
-		:user/status   :user.status/active}])))
+		:user/status   :user.status/active}
+		 {:db/id         (d/tempid :db.part/user)
+			:user/name     "Julian"
+			:user/email    "jjelfs@gmail.com"
+			:user/password (password/encrypt "jeff")
+			:user/group    [gid gid2]
+			:user/status   :user.status/active}])))
 
 
 (defn start []

@@ -7,7 +7,7 @@ type Action =
 
 
 type alias User = {
-  id : Int,
+  id : Float,
   username : String,
   email : String
 }

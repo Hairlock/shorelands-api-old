@@ -11,7 +11,7 @@ userItem : User -> Html
 userItem user =
   li [] [
       div [ class "user-item" ] [
-          p [] [ text (toString user.name) ],
+          p [] [ text (toString user.username) ],
           p [] [ text (toString user.email) ]
       ]
   ]
